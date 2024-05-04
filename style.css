@@ -1,0 +1,27 @@
+#buttons{
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px;
+}
+#rock, #paper, #scissors {
+    border-radius: 10%;
+    font-size: 20px;
+    margin: 20px;
+}
+
+.playerDisp, .compDisp{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    margin: 10px;
+}
