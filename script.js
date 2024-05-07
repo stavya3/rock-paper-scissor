@@ -7,7 +7,16 @@ function getComputerChoice(gameChoices){
     return gameChoices[Math.floor(Math.random() * gameChoices.length)];
 }
 
-let roundWinner;
+let playerScore = 0;
+let computerScore = 0;
+let roundWinner='';
+
+var playerDisp = document.querySelector("#playerDisp");
+var compDisp = document.querySelector("#compDisp");
+let disp = document.querySelector("#detail");
+
+
+
 // actual Game
 function playRound(playerSelection){
 
@@ -17,7 +26,7 @@ function playRound(playerSelection){
 
     if (playerSelection == computerSelection){
         roundWinner = 'tie';
-        return('It\'s a tie ! You both chose '+ playerSelection + '!');
+        //return('It\'s a tie ! You both chose '+ playerSelection + '!');
         
     }
     // computer wins
@@ -25,60 +34,111 @@ function playRound(playerSelection){
     playerSelection == 'paper' && computerSelection == 'scissors'||
     playerSelection == 'scissors' && computerSelection == 'rock'   
     ){
-        roundWinner = 'computer'
-        return('You lose, ' + computerSelection + ' beats ' + playerSelection);
+        roundWinner = 'computer';
+        computerScore++;
+        //return('You lose, ' + computerSelection + ' beats ' + playerSelection);
 
     }
     else {
         roundWinner = 'player'
-        return('You Win !, ' + playerSelection + ' beats ' + computerSelection + '!');
+        playerScore++;
+        //return('You Win !, ' + playerSelection + ' beats ' + computerSelection + '!');
     }
+
+    updateScoreMessage(roundWinner, playerSelection, computerSelection);
+}
+
+function endGame(){
+    return playerScore === 5 || computerScore === 5;
 }
 
 // const playerSelection = "rock";
 
 // console.log(playRound(playerSelection).gameString);
 
-
-
-function clickFunction(playerSelection, computerSelection){
-    
-}
-
-function updateChoice(playerSelection, computerSelection){
-    switch(playerSelection){
-        case 'rock':
-            playerDisp.textContent = "Rock";
-            break;
-        case 'paper':
-            playerDisp.textContent = "Paper";
-            break;
-        case 'scissors':
-            playerDisp.textContent = "Scissors";
-            break;
-    }
-
-    switch(computerSelection){
-        case 'rock':
-            compDisp.textContent = "Rock";
-            break;
-        case 'paper':
-            compDisp.textContent = "Paper";
-            break;
-        case 'scissors':
-            compDisp.textContent = "Scissors";
-            break;
-
-    }
-}
 function updateScore(roundWinner){
-    let playerScore = 0;
-    let computerScore = 0;
-    
+    // This function will take in the roundWinner and then print the intermediate win/lose message and will also print the score
     if (roundWinner === 'tie'){
-        
+        msg.textContent = "It's a tie";
+        msg.style.color = "black";
+    }
+    
+
+    else if (roundWinner === 'player'){
+        msg.textContent = "you WIN!";
+        msg.style.color = "green";
+    }
+    else if (roundWinner === 'computer'){
+        msg.textContent = "you lose :(";
+        msg.style.color = "red";
+    }
+    
+    playerDisp.textContent = `Player: ${playerScore}`;
+    compDisp.textContent = `Computer: ${computerScore}`;
+}
+
+function updateScoreMessage(winner, playerSelection, computerSelection){
+    if (winner === 'player'){
+        disp.textContent = `${playerSelection} beats ${computerSelection}`;
+        return;
+    }
+    else if (winner === 'computer'){
+        disp.textContent = `${computerSelection} beats ${playerSelection}`;
+        return;
+    }
+    else {
+        disp.textContent = `${playerSelection} ties with ${computerSelection}`;
+        return;
     }
 }
+
+
+
+function clickFunction(playerSelection){
+
+    if (endGame()){
+        if (playerScore === 5){
+            msg.style.color = "green"
+            msg.textContent = "YOU WON THE GAME!";
+            return;
+        } else {
+            msg.style.color = "red";
+            msg.textContent = "you lost the game :(";
+            return;
+        }
+    }
+    playRound(playerSelection);
+    updateScore(roundWinner);
+    
+}
+
+// function updateChoice(playerSelection, computerSelection){
+//     switch(playerSelection){
+//         case 'rock':
+//             playerDisp.textContent = "Rock";
+//             break;
+//         case 'paper':
+//             playerDisp.textContent = "Paper";
+//             break;
+//         case 'scissors':
+//             playerDisp.textContent = "Scissors";
+//             break;
+//     }
+
+//     switch(computerSelection){
+//         case 'rock':
+//             compDisp.textContent = "Rock";
+//             break;
+//         case 'paper':
+//             compDisp.textContent = "Paper";
+//             break;
+//         case 'scissors':
+//             compDisp.textContent = "Scissors";
+//             break;
+
+//     }
+// }
+
 
 // function game(){
 
@@ -110,14 +170,13 @@ function updateScore(roundWinner){
 
 // game();
 
+
+
+
 var rock = document.querySelector("#rock");
 var pap = document.querySelector("#paper");
 var sci = document.querySelector("#scissors");
 
-rock.addEventListener("click", () => playRound("rock"));
-pap.addEventListener("click", () => playRound("paper"));
-sci.addEventListener("click", () => playRound("scissors"));
-
-var playerDisp = document.querySelector(".playerDisp");
-var compDisp = document.querySelector(".compDisp");
-
+rock.addEventListener("click", () => clickFunction("rock"));
+pap.addEventListener("click", () => clickFunction("paper"));
+sci.addEventListener("click", () => clickFunction("scissors"));
